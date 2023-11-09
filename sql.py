@@ -1,27 +1,26 @@
 import psycopg2
-conn =psycopg2.connect(host = 'localhost',
-                       database = 'postgres',
-                       port = '5433',
-                       user = 'postgres',
-                       password = '1234567' )
-cur = conn.cursor()
-
-import psycopg2
 
 conn = psycopg2.connect(host = 'localhost',
                        database = 'postgres',
-                       port = '5433',
+                       port = '5432',
                        user = 'postgres',
-                       password = '1234567' )
+                       password = '123' )
 cur = conn.cursor()
 
-cur.execute("SELECT * FROM Orders JOIN Products ON Orders.product_id = Products.product_id JOIN Customers ON Orders.customer_id = Customers.customer_id")
-order_info = cur.fetchall()
+cur.execute("SELECT name FROM Customers")
+usernames = [r[0] for r in cur.fetchall()]
+Found = False 
+while not Found:
+    username = input('Login:')
+    if username in usernames:
+        print('Welcome')
+        Found=True
+    else:
+        print('Enter valid login please')
 
+conn.commit()
 cur.close()
 conn.close()
-
-print("Информация о продукте, заказе и клиенте:", order_info)
 
 
 # cur.execute("SELECT customer_id, SUM(price * count_or) FROM Orders JOIN Products ON Orders.product_id = Products.product_id GROUP BY customer_id")
